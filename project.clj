@@ -6,5 +6,5 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [com.novemberain/monger "3.0.1"]]
   :main keyword-search.core
-  :bin {:name "find-keyword"
+  :bin {:name "keyword-search"
         :bin-path "~/bin"})
