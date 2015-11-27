@@ -12,13 +12,11 @@
 
 (defn find-images-with-keyword
   "Searches database collection for entries containing keyword in the keyword array"
-  [database keyword-collection image-collection keyword]
+  [database image-collection given-keyword]
   (let [connection (mg/connect)
         db (mg/get-db connection database)
-        keyword-entry (mc/find-maps db keyword-collection {:_id keyword})]
-    (if (empty? keyword-entry)
-      (println "Keyword not found")
-      (println keyword-entry))))
+        images (mc/find-maps db image-collection {:keywords given-keyword})]
+    ))
 
 (defn find-sub-keywords
   "given a keyword entry returns all the sub keywords"
@@ -27,7 +25,7 @@
         db (mg/get-db connection database)
         keyword-entry (first (mc/find-maps db keyword-collection {:_id given-keyword}))]
     (if (empty? keyword-entry)
-      (println "Keyword not found")
+      (println (str "Keyword not found: " given-keyword ))
       (if (= 0 (count (:sub keyword-entry)))
         given-keyword
         (flatten (conj
@@ -39,13 +37,14 @@
         database (first arguments)
         keyword-collection (second arguments)
         image-collection (nth arguments 2)
-        keyword (nth arguments 3)]
+        given-keyword (nth arguments 3)]
 
-    (if (:help options)
-      (println (str "Usage:\nkeyword-search [options] database keyword-coll image-coll keyword\n\noptions:\n" summary))
-      (do
-       (println (str "options: " options))
-       (println (str "args:    " arguments))
-       (println (str "errors:  " errors))
-       (println (str "summary:\n" summary))
-       (find-images-with-keyword database keyword-collection image-collection keyword)))))
+    (cond
+     (:help options)
+     (println (str "Usage:\nkeyword-search [options] database keyword-coll image-coll keyword\n\noptions:\n" summary))
+
+     (:sub options)
+     (find-sub-keywords database keyword-collection given-keyword)
+
+     :else
+     (println "default option here"))))
