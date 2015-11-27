@@ -15,7 +15,8 @@
   [database image-collection given-keyword]
   (let [connection (mg/connect)
         db (mg/get-db connection database)
-        images (mc/find-maps db image-collection {:keywords given-keyword})]
+        images (mc/find-maps db image-collection {:Keywords given-keyword})]
+    images
     ))
 
 (defn find-sub-keywords
@@ -47,4 +48,7 @@
      (find-sub-keywords database keyword-collection given-keyword)
 
      :else
-     (println "default option here"))))
+     (println
+      (str "Found "
+           (count (find-images-with-keyword database image-collection given-keyword))
+           " images.")))))
