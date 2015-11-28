@@ -24,7 +24,7 @@
   [database image-collection field value]
   (let [connection (mg/connect)
         db (mg/get-db connection database)]
-    (mc/find-maps db image-collection {field value} [:_id])))
+    (mc/find-maps db image-collection {field value} [:Year :Month :Project :Version])))
 
 (defn find-sub-keywords
   "given a keyword entry returns all the sub keywords"
@@ -62,6 +62,6 @@
            " images."))
 
      :else
-     (find-images (:database options) (:image-collection options) (:metadata-field options) given-keyword)
+     (map #(str (:Year %) "/" (:Month %) "/" (:Project %) "/" (:Version %) ".jpg") (find-images (:database options) (:image-collection options) (:metadata-field options) given-keyword))
      ;;(println "default case")
      )))
