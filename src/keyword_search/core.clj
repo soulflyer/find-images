@@ -41,27 +41,33 @@
                   given-keyword))))))
 
 (defn -main [& args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)
-        ;;database (first arguments)
-        ;;keyword-collection (second arguments)
-        ;;image-collection (nth arguments 2)
-        given-keyword (first arguments)
-        ]
+  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
 
     (cond
      (:help options)
-     (println (str "Usage:\nkeyword-search [options] database keyword-coll image-coll keyword\n\nvoptions:\n" summary))
+     (println (str "Usage:\nkeyword-search [options] keyword\n\nvoptions:\n" summary))
 
      (:sub options)
-     (find-sub-keywords (:database options) (:keyword-collection options) given-keyword)
+
+     (doall
+      (map
+       println
+       (find-sub-keywords (:database options) (:keyword-collection options) (first arguments))))
 
      (:count options)
      (println
       (str "Found "
-           (count (find-images (:database options) (:image-collection options) (:metadata-field options) given-keyword))
+           (count (find-images (:database options) (:image-collection options) (:metadata-field options) (first arguments)))
            " images."))
 
      :else
-     (map #(str (:Year %) "/" (:Month %) "/" (:Project %) "/" (:Version %) ".jpg") (find-images (:database options) (:image-collection options) (:metadata-field options) given-keyword))
-     ;;(println "default case")
-     )))
+     (doall
+      (map
+       println
+       (map
+        #(str (:Year %) "/" (:Month %) "/" (:Project %) "/" (:Version %) ".jpg")
+        (find-images
+         (:database options)
+         (:image-collection options)
+         (:metadata-field options)
+         (first arguments))))))))
