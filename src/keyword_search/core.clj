@@ -48,7 +48,6 @@
      (println (str "Usage:\nkeyword-search [options] keyword\n\nvoptions:\n" summary))
 
      (:sub options)
-
      (doall
       (map
        println

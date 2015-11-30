@@ -5,7 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/tools.cli "0.3.3"]
-                 [com.novemberain/monger "3.0.1"]]
+                 [com.novemberain/monger "3.0.1"]
+                 [org.slf4j/slf4j-nop "1.7.12"]]
   :main keyword-search.core
   :bin {:name "keyword-search"
         :bin-path "~/bin"})
