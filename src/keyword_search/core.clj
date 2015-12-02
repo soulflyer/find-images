@@ -70,17 +70,18 @@
 
      (:recursive options)
      (let [keywords (find-sub-keywords (:database options) (:keyword-collection options) (first arguments))]
-       (map
-        println
+       (doall
         (map
-         image-path
-         (flatten
-          (map
-           #(find-images (:database options)
-                         (:image-collection options)
-                         (:metadata-field options)
-                         % )
-           keywords)))))
+         println
+         (map
+          image-path
+          (flatten
+           (map
+            #(find-images (:database options)
+                          (:image-collection options)
+                          (:metadata-field options)
+                          % )
+            keywords))))))
 
 
      :else
