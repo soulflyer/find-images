@@ -16,7 +16,7 @@
     :default "images"]
    ["-k" "--keyword-collection KEYWORD-COLLECTION" "specifies the keyword collection"
     :default "keywords"]
-   ["-m" "--metadata-field" "field to be searched"
+   ["-m" "--metadata-field METADATA-FIELD" "field to be searched"
     :default :Keywords]
    ["-h" "--help"]])
 
@@ -82,7 +82,6 @@
                           (:metadata-field options)
                           % )
             keywords))))))
-
 
      :else
      (doall
