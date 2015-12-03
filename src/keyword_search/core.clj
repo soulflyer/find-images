@@ -25,7 +25,7 @@
   [database image-collection field value]
   (let [connection (mg/connect)
         db (mg/get-db connection database)]
-    (mc/find-maps db image-collection {field value} [:Year :Month :Project :Version])))
+    (mc/find-maps db image-collection {field {$regex value}} [:Year :Month :Project :Version])))
 
 (defn find-sub-keywords
   "given a keyword entry returns a list of all the sub keywords"
