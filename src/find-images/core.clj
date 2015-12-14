@@ -1,4 +1,4 @@
-(ns keyword-search.core
+(ns find-images.core
   (:require [clojure.set :as set]
             [clojure.tools.cli :refer :all]
             [monger.collection :as mc]
