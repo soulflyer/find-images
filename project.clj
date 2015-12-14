@@ -1,6 +1,6 @@
 (defproject find-images "0.1.0-SNAPSHOT"
   :description "Find entries in metadata db with metadata that matches a given string, including all nested keywords."
-  :url "http://example.com/FIXME"
+  :url "https://github.com/soulflyer/find-images"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]
