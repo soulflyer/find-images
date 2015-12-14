@@ -25,7 +25,12 @@
   [database image-collection field value]
   (let [connection (mg/connect)
         db (mg/get-db connection database)]
-    (mc/find-maps db image-collection {field {$regex value}} [:Year :Month :Project :Version])))
+    (mc/find-maps db image-collection {field {$regex value}})))
+
+(defn find-best-image
+  "return an image with the highest rating for the given keyword"
+  [database keyword-collection given-keyword]
+  )
 
 (defn find-sub-keywords
   "given a keyword entry returns a list of all the sub keywords"
