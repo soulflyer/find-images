@@ -25,6 +25,13 @@
   [database image-collection field value]
   (let [connection (mg/connect)
         db (mg/get-db connection database)]
+    (mc/find-maps db image-collection {field value})))
+
+(defn find-images-containing
+  "Searches database collection for entries where the given field is (or contains) the given value"
+  [database image-collection field value]
+  (let [connection (mg/connect)
+        db (mg/get-db connection database)]
     (mc/find-maps db image-collection {field {$regex value}})))
 
 (defn find-best-image
@@ -94,7 +101,7 @@
        println
        (map
         image-path
-        (find-images
+        (find-images-containing
          (:database options)
          (:image-collection options)
          (:metadata-field options)
