@@ -1,9 +1,9 @@
 (ns find-images.core
-  (:require [clojure.set :as set]
-            [clojure.tools.cli :refer :all]
-            [monger.collection :as mc]
-            [monger.core :as mg]
-            [monger.operators :refer :all])
+  (:require [clojure.tools.cli :refer :all]
+            [image-lib.core    :refer [find-images
+                                       find-images-containing
+                                       find-sub-keywords
+                                       image-path]])
   (:gen-class))
 
 (def cli-options
@@ -20,47 +20,6 @@
     :default :Keywords]
    ["-h" "--help"]])
 
-(defn find-images
-  "Searches database collection for entries where the given field is (or contains) the given value"
-  [database image-collection field value]
-  (let [connection (mg/connect)
-        db (mg/get-db connection database)]
-    (mc/find-maps db image-collection {field value})))
-
-(defn find-images-containing
-  "Searches database collection for entries where the given field is (or contains) the given value"
-  [database image-collection field value]
-  (let [connection (mg/connect)
-        db (mg/get-db connection database)]
-    (mc/find-maps db image-collection {field {$regex value}})))
-
-(defn find-best-image
-  "return an image with the highest rating for the given keyword"
-  [database keyword-collection given-keyword]
-  )
-
-(defn find-sub-keywords
-  "given a keyword entry returns a list of all the sub keywords"
-  [database keyword-collection given-keyword]
-  (let [connection (mg/connect)
-        db (mg/get-db connection database)
-        keyword-entry (first (mc/find-maps db keyword-collection {:_id given-keyword}))]
-    (if (empty? keyword-entry)
-      (println (str "Keyword not found: " given-keyword ))
-      (if (= 0 (count (:sub keyword-entry)))
-        (conj '() given-keyword)
-        (flatten (conj
-                  (map #(find-sub-keywords database keyword-collection %) (:sub keyword-entry))
-                  given-keyword))))))
-
-(defn image-path
-  "return a string containing the year/month/project/version path of an image"
-  [image-map]
-  (str (:Year image-map) "/"
-       (:Month image-map) "/"
-       (:Project image-map) "/"
-       (:Version image-map) ".jpg"))
-
 (defn -main [& args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
 
@@ -72,16 +31,26 @@
      (doall
       (map
        println
-       (find-sub-keywords (:database options) (:keyword-collection options) (first arguments))))
+       (find-sub-keywords
+        (:database options)
+        (:keyword-collection options) (first arguments))))
 
      (:count options)
      (println
       (str "Found "
-           (count (find-images (:database options) (:image-collection options) (:metadata-field options) (first arguments)))
+           (count
+            (find-images
+             (:database options)
+             (:image-collection options)
+             (:metadata-field options)
+             (first arguments)))
            " images."))
 
      (:recursive options)
-     (let [keywords (find-sub-keywords (:database options) (:keyword-collection options) (first arguments))]
+     (let [keywords
+           (find-sub-keywords
+            (:database options)
+            (:keyword-collection options) (first arguments))]
        (doall
         (map
          println
