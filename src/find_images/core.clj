@@ -25,7 +25,7 @@
 
     (cond
      (:help options)
-     (println (str "Usage:\nkeyword-search [options] keyword\n\nvoptions:\n" summary))
+     (println (str "Usage:\nfind-images [options] keyword\n\nvoptions:\n" summary))
 
      (:sub options)
      (doall
