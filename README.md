@@ -1,6 +1,6 @@
 # find-images
 
-A Clojure library designed to search for images matching given metadata.
+A Clojure library designed to search for images matching given metadata. Deprecated in favour of image-search.
 
 ## Usage
 
